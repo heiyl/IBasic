@@ -29,7 +29,7 @@ import okhttp3.Response;
  * Author:pengjianbo
  * Date:16/4/19 上午10:24
  */
-class OkHttpTask implements Callback, ProgressCallback{
+class OkHttpTask implements Callback, ProgressCallback {
 
     private Handler handler = new Handler(Looper.getMainLooper());
     public static final String DEFAULT_HTTP_TASK_KEY = "default_http_task_key";
@@ -46,7 +46,7 @@ class OkHttpTask implements Callback, ProgressCallback{
         this.method = method;
         this.url = url;
         if (params == null) {
-        this.callback = callback;
+            this.callback = callback;
             this.params = new RequestParams();
         } else {
             this.params = params;
@@ -134,6 +134,16 @@ class OkHttpTask implements Callback, ProgressCallback{
         call.enqueue(this);
     }
 
+    public void cancel() {
+        //防止内存泄漏
+        HttpRequest.cancel(url);
+        this.callback = null;
+        if (params != null) {
+            this.params.httpCycleContext = null;
+            this.params = null;
+        }
+    }
+
     /**
      * 处理进度
      *
@@ -190,7 +200,7 @@ class OkHttpTask implements Callback, ProgressCallback{
         } else {
             responseData.setResponseNull(true);
             responseData.setCode(BaseHttpRequestCallback.ERROR_RESPONSE_UNKNOWN);
-            if(responseData.isTimeout()) {
+            if (responseData.isTimeout()) {
                 responseData.setMessage("request timeout");
             } else {
                 responseData.setMessage("http exception");

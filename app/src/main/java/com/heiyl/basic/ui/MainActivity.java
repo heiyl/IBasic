@@ -11,12 +11,13 @@ import com.common.basic.net.ResultDto;
 import com.common.basic.okhttpfinal.business.RequestParams;
 import com.common.basic.tools.utils.JsonFormatUtils;
 import com.heiyl.basic.R;
+import com.heiyl.basic.base.BaseActivity;
 import com.heiyl.basic.constants.API;
 import com.heiyl.basic.constants.Task;
 import com.heiyl.basic.models.IndexMessagesDto;
 import com.heiyl.basic.service.IndexModelCenter;
 
-public class MainActivity extends Activity implements ResponseListener<ResultDto>,View.OnClickListener{
+public class MainActivity extends BaseActivity implements ResponseListener<ResultDto>,View.OnClickListener{
 
     RequestParams requestParams;
     @Override
@@ -42,7 +43,7 @@ public class MainActivity extends Activity implements ResponseListener<ResultDto
     private void request() {
         try {
             IndexModelCenter modelCenter = new IndexModelCenter();
-            requestParams = new RequestParams();
+            requestParams = new RequestParams(this);
             requestParams.addHeader("authToken","c1974ae97e8d4f65b0be8cb57faa9c9b");
             requestParams.addHeader("channeltype","2");
             requestParams.addFormDataPart("pageSize", "10");

@@ -28,9 +28,13 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class HttpTaskHandler {
 
-    /** 正在请求的任务集合 */
+    /**
+     * 正在请求的任务集合
+     */
     private static Map<String, List<OkHttpTask>> httpTaskMap;
-    /** 单例请求处理器 */
+    /**
+     * 单例请求处理器
+     */
     private static HttpTaskHandler httpTaskHandler = null;
 
     private HttpTaskHandler() {
@@ -49,17 +53,25 @@ public class HttpTaskHandler {
 
     /**
      * 移除KEY
+     *
      * @param key
      */
     public void removeTask(String key) {
         if (httpTaskMap.containsKey(key)) {
             //移除对应的Key
-            httpTaskMap.remove(key);
+//            httpTaskMap.remove(key);
+            List<OkHttpTask> okHttpTaskList = httpTaskMap.remove(key);
+            if (okHttpTaskList != null) {
+                for (OkHttpTask okHttpTask : okHttpTaskList) {
+                    okHttpTask.cancel();
+                }
+            }
         }
     }
 
     /**
      * 将请求放到Map里面
+     *
      * @param key
      * @param task
      */
@@ -77,6 +89,7 @@ public class HttpTaskHandler {
 
     /**
      * 判断是否存在
+     *
      * @param key
      * @return
      */

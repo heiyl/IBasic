@@ -22,6 +22,7 @@ import com.common.basic.BasicConstants;
 import com.common.basic.okhttpfinal.business.OkHttpFinal;
 import com.common.basic.okhttpfinal.business.OkHttpFinalConfiguration;
 import com.heiyl.basic.constants.API;
+import com.squareup.leakcanary.LeakCanary;
 
 public class IApplication extends Application {
 
@@ -29,6 +30,12 @@ public class IApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
         new Thread(new Runnable() {
             @Override
             public void run() {

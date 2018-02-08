@@ -2,19 +2,10 @@
 package com.common.imagefinal;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.common.imagefinal.wrap.GlideWrapper;
 import com.common.imagefinal.wrap.ImageConfigProduct;
 import com.common.imagefinal.wrap.ImageLoaderUtils;
@@ -40,6 +31,15 @@ public class ImageManager {
      * 图片加载形状：圆形图片模式
      */
     public static final int DISPLAY_SHAPE_CIRCLE = 1;
+    /**
+     * 图片加载形状：圆角图片模式：默认圆角为10
+     */
+    public static final int DISPLAY_SHAPE_ROUNDED = 2;
+
+    /**
+     * 图片加载圆角图片时的默认圆角值：可根据需求自定义
+     */
+    public static final int RADIUS = 10;
 
     //默认使用Glidei加载图片
     private int loadFrameworkType = GLIDE_TYPE;
@@ -81,6 +81,7 @@ public class ImageManager {
     }
 
     /**
+     * #适用于ImageView固定宽高的加载模式#
      * 加载网络图片
      * @param imageView ：显示图片的视图
      * @param urlStr：图片资源路径url
@@ -110,7 +111,9 @@ public class ImageManager {
                         urlStr, imageView, configProduct);
     }
     /**
+     * #适用于加载不同形状ImageView加载模式#
      * 加载网络图片
+     * @param shape ：图片加载形状：正常模式,默认都是正常模式
      * @param imageView ：显示图片的视图
      * @param urlStr：图片资源路径url
      * @param defaultImageResourceID:默认加载的图片资源id
@@ -139,57 +142,9 @@ public class ImageManager {
                 .display(
                         urlStr, imageView, configProduct);
     }
-    /**
-     * 加载网络图片
-     * @param imageView ：显示图片的视图
-     * @param urlStr：图片资源路径url
-     * @param defaultImageResourceID:默认加载的图片资源id
-     * @param wh :自适应图片宽高显示
-     */
-    public void displayImage(final ImageView imageView, String urlStr, int defaultImageResourceID,boolean wh) {
-
-        if (imageView == null) {
-            return;
-        }
-        if (TextUtils.isEmpty(urlStr)) {
-            if (defaultImageResourceID > 0) {
-                imageView.setImageResource(defaultImageResourceID);
-            }
-            return;
-        }
-
-        Glide.with(imageView.getContext())
-                .load(urlStr)
-                .apply(new RequestOptions().placeholder(defaultImageResourceID).error(defaultImageResourceID).centerCrop())
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        if (imageView == null) {
-                            return false;
-                        }
-                        if (imageView.getScaleType() != ImageView.ScaleType.FIT_XY) {
-                            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                        }
-                        ViewGroup.LayoutParams params = imageView.getLayoutParams();
-                        int vw = imageView.getWidth() - imageView.getPaddingLeft() - imageView.getPaddingRight();
-                        float scale = (float) vw / (float) resource.getIntrinsicWidth();
-                        int vh = Math.round(resource.getIntrinsicHeight() * scale);
-                        params.height = vh + imageView.getPaddingTop() + imageView.getPaddingBottom();
-                        imageView.setLayoutParams(params);
-                        return false;
-
-                    }
-                })
-                .into(imageView);
-
-    }
 
     /**
+     * #适用于选择不同图片加载库模式：当要加载自适应宽高的图片时loadframeworktype可以传2：ImageLoader形式加载#
      * 加载网络图片
      * @param imageView：显示图片的视图
      * @param urlStr：图片资源路径url

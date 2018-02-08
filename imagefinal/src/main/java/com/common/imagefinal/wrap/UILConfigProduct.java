@@ -61,6 +61,8 @@ public class UILConfigProduct implements ImageConfigProduct {
         ImageLoaderWrapper.DisplayConfig config;
         if(this.shape == ImageManager.DISPLAY_SHAPE_CIRCLE){
             config = new ImageLoaderWrapper.DisplayConfig.Builder().buildCircular();
+        }else if(this.shape == ImageManager.DISPLAY_SHAPE_ROUNDED){
+            config = new ImageLoaderWrapper.DisplayConfig.Builder().buildRounded();
         }else{
             config = new ImageLoaderWrapper.DisplayConfig.Builder().build();
         }

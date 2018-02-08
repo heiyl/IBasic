@@ -23,6 +23,8 @@ public class GlideLoaderProduct implements ImageLoaderProduct {
         RequestOptions requestOptions;
         if(mConfig.shape == ImageManager.DISPLAY_SHAPE_CIRCLE){
             requestOptions = RequestOptions.circleCropTransform();
+        }else if(mConfig.shape == ImageManager.DISPLAY_SHAPE_ROUNDED){
+            requestOptions = new RequestOptions().centerCrop().transform(new GlideRoundTransform());
         }else{
             requestOptions = new RequestOptions();
         }

@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ImageView;
 
+import com.common.imagefinal.ImageManager;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.FIFOLimitedMemoryCache;
@@ -347,7 +348,7 @@ public class ImageLoaderWrapper {
         private static final BitmapDisplayer sDefaultFadein = new FadeInBitmapDisplayer(
                 300);
         private static final BitmapDisplayer sDefaultRound = new RoundedBitmapDisplayer(
-                10);
+                ImageManager.RADIUS);
         private static final BitmapDisplayer sDefaultCircular = new CircularBitmapDisplayer();
 
         private DisplayConfig() {
